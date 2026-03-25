@@ -95,19 +95,42 @@ searchInput.addEventListener("input", () => {
 
 // 리포트 요약
 function generateSummaryRSS(item) {
-    const clean = item.description
+    // description이 비어있거나 undefined인 경우 대비
+    const rawDesc = item.description || "";
+    const clean = rawDesc
         .replace(/<[^>]*>/g, "")
         .replace(/\s+/g, " ")
         .trim();
 
-    const firstSentence = clean.split(".")[0] + ".";
+    // description이 없는 경우 기본 안내문 생성
+    const fallbackText = clean.length > 0 
+        ? clean 
+        : `${item.source}에서 제공한 "${item.title}" 항목은 본문(description) 데이터를 제공하지 않았습니다. 
+아래 '전체 보기' 링크를 통해 원문을 확인하세요.`;
+
+    // 핵심 한줄 요약 생성
+    const firstSentence = fallbackText.split(".")[0] + ".";
+
+    // 키워드 추출 (description이 있을 때만)
+    const words = fallbackText.split(/\W+/);
+    const freq = {};
+    words.forEach(w => {
+        if (w.length > 4) freq[w] = (freq[w] || 0) + 1;
+    });
+    const keywords = Object.keys(freq)
+        .sort((a, b) => freq[b] - freq[a])
+        .slice(0, 3)
+        .join(", ");
 
     return `
 📌 핵심 요약
 - ${firstSentence}
 
+📍 주요 키워드
+- ${keywords || "키워드를 추출할 수 없습니다"}
+
 📝 본문 일부
-${clean.slice(0, 220)}...
+${fallbackText.slice(0, 250)}...
 
 🔗 전체 보기
 ${item.link}
