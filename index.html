@@ -2,37 +2,37 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>증권사 리포트 모아보기</title>
-
-    <!-- CSS 파일 로드 -->
+    <title>리포트 모아보기</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>📈 증권사 리포트 모아보기 (UI + 검색 기능)</h1>
+    <h1>📈 리포트 모아보기 (RSS + API 연동)</h1>
 
-    <!-- 🔎 검색창 -->
+    <!-- 검색창 -->
     <input 
         type="text" 
         id="searchInput" 
-        placeholder="검색어를 입력하세요 (제목, 출처, 내용)"
+        placeholder="검색어를 입력하세요 (제목, 출처, 본문)"
         class="search-box"
     />
 
     <div class="container">
+
         <div class="left">
             <h2>리포트 목록</h2>
-            <div id="reportList"></div> 
+            <div id="reportList"></div>
         </div>
 
         <div class="right">
             <h2>리포트 요약</h2>
-            <div id="summary" class="summary-box">리포트를 선택하세요.</div>
+            <div id="summary" class="summary-box">
+                리포트를 선택하세요.
+            </div>
         </div>
+
     </div>
 
-    <!-- JS 불러오기 (이 태그 덕분에 요약 기능 작동함) -->
     <script src="app.js"></script>
 </body>
 </html>
-``
