@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>리포트 모아보기</title>
+    <title>리포트 대시보드</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>📈 리포트 모아보기 (RSS + API 연동)</h1>
+    <h1>📈 리포트 대시보드 (RSS 기반 경제/시장 분석)</h1>
 
     <!-- 검색창 -->
     <input 
@@ -19,11 +19,13 @@
 
     <div class="container">
 
+        <!-- 왼쪽 리스트 -->
         <div class="left">
             <h2>리포트 목록</h2>
             <div id="reportList"></div>
         </div>
 
+        <!-- 오른쪽 상세 요약 -->
         <div class="right">
             <h2>리포트 요약</h2>
             <div id="summary" class="summary-box">
@@ -33,6 +35,7 @@
 
     </div>
 
+    <!-- JS -->
     <script src="app.js"></script>
 </body>
 </html>
