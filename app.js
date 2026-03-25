@@ -3,14 +3,14 @@ const listEl = document.getElementById("reportList");
 const summaryEl = document.getElementById("summary");
 const searchInput = document.getElementById("searchInput");
 
-// RSS 피드 목록
+// RSS 피드 (안정적으로 작동하는 3종)
 const rssFeeds = [
     { name: "Investing.com 경제뉴스", url: "https://www.investing.com/rss/news.rss" },
     { name: "Yahoo Finance Top Stories", url: "https://finance.yahoo.com/news/rss/" },
     { name: "한국은행 경제동향", url: "https://www.bok.or.kr/portal/bbs/B0000140/rss.do" }
 ];
 
-// RSS → JSON 파싱
+// RSS → JSON 변환
 async function fetchRSS(feedUrl) {
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
     const response = await fetch(apiUrl);
@@ -21,7 +21,7 @@ async function fetchRSS(feedUrl) {
 // 전체 리포트 저장
 let allReports = [];
 
-// RSS 로딩
+// 1) RSS 데이터 로딩
 async function loadRSSReports() {
     summaryEl.textContent = "📡 RSS 데이터 로딩 중...";
 
@@ -38,7 +38,6 @@ async function loadRSSReports() {
             }));
 
             allReports = [...allReports, ...parsed];
-
         } catch (err) {
             console.error("RSS 오류:", err);
         }
@@ -48,7 +47,7 @@ async function loadRSSReports() {
     renderReports(allReports);
 }
 
-// 카드 UI 렌더링
+// 2) 카드 UI 렌더링
 function renderReports(reports) {
     listEl.innerHTML = "";
 
@@ -56,44 +55,25 @@ function renderReports(reports) {
         const card = document.createElement("div");
         card.classList.add("card");
 
-        const title = document.createElement("div");
-        title.classList.add("card-title");
-        title.textContent = item.title;
+        card.innerHTML = `
+            <div class="card-title">${item.title}</div>
+            <div class="card-source">${item.source}</div>
+            <div class="card-date">${item.pubDate || ""}</div>
+        `;
 
-        const source = document.createElement("div");
-        source.classList.add("card-source");
-        source.textContent = item.source;
-
-        const date = document.createElement("div");
-        date.classList.add("card-date");
-        date.textContent = item.pubDate || "";
-
-        card.appendChild(title);
-        card.appendChild(source);
-        card.appendChild(date);
-
-        card.addEventListener("click", async () => {
-            summaryEl.textContent = "📡 리포트 불러오는 중...";
-
-            // API 호출: 실제 HTML 가져옴
-            const result = await fetchReport(item.link);
-
-            // HTML 요약
-            const summary = summarizeHTML(result.snippet);
-
-            // 화면 출력
-            summaryEl.textContent = summary;
+        card.addEventListener("click", () => {
+            summaryEl.textContent = summarizeDescription(item);
         });
 
         listEl.appendChild(card);
     });
 }
 
-// 검색 기능
+// 3) 검색 기능
 searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.toLowerCase();
 
-    const filtered = allReports.filter(item => 
+    const filtered = allReports.filter(item =>
         item.title.toLowerCase().includes(keyword) ||
         item.source.toLowerCase().includes(keyword) ||
         item.description.toLowerCase().includes(keyword)
@@ -102,33 +82,27 @@ searchInput.addEventListener("input", () => {
     renderReports(filtered);
 });
 
-// Vercel API 호출
-async function fetchReport(url) {
-  const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
-  const response = await fetch(api);
-  const data = await response.json();
-  return data;
-}
+// 4) 요약 알고리즘 (본문 기반 요약)
+function summarizeDescription(item) {
+    const raw = item.description || "";
+    const clean = raw
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 
-// HTML 요약
-function summarizeHTML(html) {
-  const text = html
-      .replace(/<[^>]+>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    const firstSentence = clean.split(".")[0] + ".";
 
-  const firstSentence = text.split(".")[0] + ".";
-
-  return `
-📌 리포트 요약
+    return `
+📌 핵심 요약
 - ${firstSentence}
 
 📝 본문 일부:
-${text.slice(0, 300)}...
+${clean.slice(0, 300)}...
 
-  
-원문 전체는 링크에서 확인하세요.
-  `;
+🔗 전체 보기:
+${item.link}
+    `;
 }
 
+// 실행
 loadRSSReports();
