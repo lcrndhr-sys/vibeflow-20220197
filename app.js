@@ -90,19 +90,24 @@ function summarizeDescription(item) {
         .replace(/\s+/g, " ")
         .trim();
 
-    const firstSentence = clean.split(".")[0] + ".";
+    const firstSentence = clean.length > 0
+        ? clean.split(".")[0] + "."
+        : "본문 요약 정보를 제공하지 않는 RSS 항목입니다.";
 
     return `
-📌 핵심 요약
-- ${firstSentence}
+📌 <b>핵심 요약</b><br>
+- ${firstSentence}<br><br>
 
-📝 본문 일부:
-${clean.slice(0, 300)}...
+📝 <b>본문 일부</b><br>
+${clean.slice(0, 300)}...<br><br>
 
-🔗 전체 보기:
-${item.link}
+🔗 <b>전체 보기</b>: 
+<a href="${item.link}" target="_blank" style="color: #0066cc; text-decoration: underline;">
+리포트 페이지 열기
+</a>
     `;
 }
+
 
 // 실행
 loadRSSReports();
