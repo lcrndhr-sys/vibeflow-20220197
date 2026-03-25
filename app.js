@@ -161,3 +161,22 @@ async function fetchReport(url) {
   const data = await response.json();
   return data;  // { title, snippet }
 }
+
+function summarizeHTML(html) {
+  const text = html
+      .replace(/<[^>]+>/g, " ") // HTML 태그 제거
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const firstSentence = text.split(".")[0] + ".";
+
+  return `
+📌 HTML 분석 핵심 요약
+- ${firstSentence}
+
+📝 원문 일부
+${text.slice(0, 300)}...
+
+(※ 상세보기는 원문 페이지 링크에서 확인)
+  `;
+}
