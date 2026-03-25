@@ -139,3 +139,8 @@ ${item.link}
 
 loadRSSReports();
 ``
+async function fetchReport(url) {
+  const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
+  const data = await fetch(api).then(r => r.json());
+  console.log(data);
+}
