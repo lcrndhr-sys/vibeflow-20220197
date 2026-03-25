@@ -4,26 +4,24 @@
     <meta charset="UTF-8">
     <title>증권사 리포트 모아보기</title>
 
-    <!-- CSS 파일 로드 -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>📈 증권사 리포트 모음</h1>
+    <h1>📈 증권사 리포트 모아보기 (UI 고도화)</h1>
 
     <div class="container">
         <div class="left">
             <h2>리포트 목록</h2>
-            <ul id="reportList"></ul>
+            <div id="reportList"></div> 
         </div>
 
         <div class="right">
-            <h2>요약 내용</h2>
-            <div id="summary">리포트를 선택하세요.</div>
+            <h2>리포트 요약</h2>
+            <div id="summary" class="summary-box">리포트를 선택하세요.</div>
         </div>
     </div>
 
-    <!-- JS 파일 로드 -->
     <script src="app.js"></script>
 </body>
 </html>
