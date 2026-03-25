@@ -2,7 +2,7 @@
 const listEl = document.getElementById("reportList");
 const summaryEl = document.getElementById("summary");
 
-// RSS 피드 목록 (안전하게 작동하는 3개)
+// RSS 피드 목록 (작동 테스트용)
 const rssFeeds = [
     {
         name: "Investing.com 경제 분석",
