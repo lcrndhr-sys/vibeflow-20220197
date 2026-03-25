@@ -62,7 +62,7 @@ function renderReports(reports) {
         `;
 
         card.addEventListener("click", () => {
-            summaryEl.textContent = summarizeDescription(item);
+            summaryEl.innerHTML = summarizeDescription(item);
         });
 
         listEl.appendChild(card);
