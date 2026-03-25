@@ -5,16 +5,16 @@ const summaryEl = document.getElementById("summary");
 // RSS 피드 목록 (작동 테스트용)
 const rssFeeds = [
     {
-        name: "Investing.com 경제 분석",
-        url: "https://www.investing.com/rss/news_25.rss"
+        name: "한국은행 경제동향",
+        url: "https://www.bok.or.kr/portal/bbs/B0000140/rss.do"
     },
     {
-        name: "Reuters 비즈니스 뉴스",
-        url: "https://feeds.reuters.com/reuters/businessNews"
+        name: "Investing.com 경제뉴스",
+        url: "https://www.investing.com/rss/news.rss"
     },
     {
-        name: "Yahoo Finance Top Stories",
-        url: "https://finance.yahoo.com/news/rss/"
+        name: "OECD 경제리포트",
+        url: "https://oecdcrossanalytics.org/feed/"
     }
 ];
 
