@@ -30,8 +30,11 @@ async function fetchRSS(feedUrl) {
 //--------------------------------------------------
 async function fetchHTML(url) {
     const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
+    console.log("API 요청:", api);  // 디버그용
     const response = await fetch(api);
-    return response.json();   // { title, snippet }
+    const data = await response.json();
+    console.log("API 응답:", data); // 디버그용
+    return data;
 }
 
 //--------------------------------------------------
