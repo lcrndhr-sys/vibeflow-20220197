@@ -8,12 +8,20 @@
 </head>
 
 <body>
-    <h1>📈 증권사 리포트 모아보기 (UI 고도화)</h1>
+    <h1>📈 증권사 리포트 모아보기 (UI + 검색 기능)</h1>
+
+    <!-- 🔎 검색창 -->
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="검색어를 입력하세요 (제목, 출처, 내용)"
+        class="search-box"
+    />
 
     <div class="container">
         <div class="left">
             <h2>리포트 목록</h2>
-            <div id="reportList"></div> 
+            <div id="reportList"></div>
         </div>
 
         <div class="right">
