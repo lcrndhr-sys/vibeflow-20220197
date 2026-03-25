@@ -55,16 +55,34 @@ async function loadRSSReports() {
 
 // 요약 생성 함수
 function generateSummaryRSS(item) {
+    // HTML 제거
     const cleanDescription = item.description
-        .replace(/<[^>]*>/g, "")      // HTML 제거
-        .replace(/\s+/g, " ")         // 공백 정리
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
         .trim();
 
-    return `
-📄 제목: ${item.title}
+    // 핵심 한줄 요약 (첫 문장만 추출)
+    const firstSentence = cleanDescription.split(".")[0] + ".";
 
-📝 자동 요약:
-${cleanDescription.slice(0, 250)}...
+    // 자동 키워드 추출 (단순 버전)
+    const words = cleanDescription.split(/\W+/);
+    const freq = {};
+    words.forEach(w => {
+        if (w.length > 4) freq[w] = (freq[w] || 0) + 1;
+    });
+    const keywords = Object.keys(freq)
+        .sort((a, b) => freq[b] - freq[a])
+        .slice(0, 3);
+
+    return `
+📌 핵심 요약
+- ${firstSentence}
+
+📍 주요 키워드
+- ${keywords.join(", ")}
+
+📝 본문 일부 발췌
+${cleanDescription.slice(0, 220)}...
 
 🔗 전체 보기:
 ${item.link}
