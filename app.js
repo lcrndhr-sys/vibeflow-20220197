@@ -3,14 +3,14 @@ const listEl = document.getElementById("reportList");
 const summaryEl = document.getElementById("summary");
 const searchInput = document.getElementById("searchInput");
 
-// RSS 목록
+// RSS 피드 목록
 const rssFeeds = [
     { name: "Investing.com 경제뉴스", url: "https://www.investing.com/rss/news.rss" },
     { name: "Yahoo Finance Top Stories", url: "https://finance.yahoo.com/news/rss/" },
     { name: "한국은행 경제동향", url: "https://www.bok.or.kr/portal/bbs/B0000140/rss.do" }
 ];
 
-// RSS 파싱
+// RSS → JSON 파싱
 async function fetchRSS(feedUrl) {
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
     const response = await fetch(apiUrl);
@@ -18,10 +18,10 @@ async function fetchRSS(feedUrl) {
     return data.items || [];
 }
 
-// 저장용 데이터
+// 전체 리포트 저장
 let allReports = [];
 
-// 초기 RSS 로딩
+// RSS 로딩
 async function loadRSSReports() {
     summaryEl.textContent = "📡 RSS 데이터 로딩 중...";
 
@@ -48,7 +48,7 @@ async function loadRSSReports() {
     renderReports(allReports);
 }
 
-// 카드 렌더링 함수
+// 카드 UI 렌더링
 function renderReports(reports) {
     listEl.innerHTML = "";
 
@@ -72,26 +72,24 @@ function renderReports(reports) {
         card.appendChild(source);
         card.appendChild(date);
 
-       
-card.addEventListener("click", async () => {
-    summaryEl.textContent = "📡 리포트 불러오는 중...";
+        card.addEventListener("click", async () => {
+            summaryEl.textContent = "📡 리포트 불러오는 중...";
 
-    // 1) Vercel에서 리포트 HTML 가져오기
-    const result = await fetchReport(item.link);
+            // API 호출: 실제 HTML 가져옴
+            const result = await fetchReport(item.link);
 
-    // 2) HTML snippet을 요약
-    const summary = summarizeHTML(result.snippet);
+            // HTML 요약
+            const summary = summarizeHTML(result.snippet);
 
-    // 3) 화면에 표시
-    summaryEl.textContent = summary;
-});
-
+            // 화면 출력
+            summaryEl.textContent = summary;
+        });
 
         listEl.appendChild(card);
     });
 }
 
-// 필터 기능
+// 검색 기능
 searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.toLowerCase();
 
@@ -104,79 +102,33 @@ searchInput.addEventListener("input", () => {
     renderReports(filtered);
 });
 
-// 리포트 요약
-function generateSummaryRSS(item) {
-    // description이 비어있거나 undefined인 경우 대비
-    const rawDesc = item.description || "";
-    const clean = rawDesc
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
-
-    // description이 없는 경우 기본 안내문 생성
-    const fallbackText = clean.length > 0 
-        ? clean 
-        : `${item.source}에서 제공한 "${item.title}" 항목은 본문(description) 데이터를 제공하지 않았습니다. 
-아래 '전체 보기' 링크를 통해 원문을 확인하세요.`;
-
-    // 핵심 한줄 요약 생성
-    const firstSentence = fallbackText.split(".")[0] + ".";
-
-    // 키워드 추출 (description이 있을 때만)
-    const words = fallbackText.split(/\W+/);
-    const freq = {};
-    words.forEach(w => {
-        if (w.length > 4) freq[w] = (freq[w] || 0) + 1;
-    });
-    const keywords = Object.keys(freq)
-        .sort((a, b) => freq[b] - freq[a])
-        .slice(0, 3)
-        .join(", ");
-
-    return `
-📌 핵심 요약
-- ${firstSentence}
-
-📍 주요 키워드
-- ${keywords || "키워드를 추출할 수 없습니다"}
-
-📝 본문 일부
-${fallbackText.slice(0, 250)}...
-
-🔗 전체 보기
-${item.link}
-    `;
-}
-
-loadRSSReports();
-``
-async function fetchReport(url) {
-  const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
-  const data = await fetch(api).then(r => r.json());
-  console.log(data);
-}
+// Vercel API 호출
 async function fetchReport(url) {
   const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
   const response = await fetch(api);
   const data = await response.json();
-  return data;  // { title, snippet }
+  return data;
 }
 
+// HTML 요약
 function summarizeHTML(html) {
   const text = html
-      .replace(/<[^>]+>/g, " ") // HTML 태그 제거
+      .replace(/<[^>]+>/g, " ")
       .replace(/\s+/g, " ")
       .trim();
 
   const firstSentence = text.split(".")[0] + ".";
 
   return `
-📌 HTML 분석 핵심 요약
+📌 리포트 요약
 - ${firstSentence}
 
-📝 원문 일부
+📝 본문 일부:
 ${text.slice(0, 300)}...
 
-(※ 상세보기는 원문 페이지 링크에서 확인)
+  
+원문 전체는 링크에서 확인하세요.
   `;
 }
+
+loadRSSReports();
