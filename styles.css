@@ -9,7 +9,6 @@ h1 {
     color: #222;
 }
 
-/* 🔎 검색창 스타일 */
 .search-box {
     width: 100%;
     padding: 12px 15px;
@@ -33,7 +32,6 @@ h1 {
     color: #444;
 }
 
-/* --- 카드 스타일 --- */
 .card {
     background: white;
     padding: 15px;
@@ -67,7 +65,6 @@ h1 {
     margin-top: 4px;
 }
 
-/* 요약 박스 */
 .summary-box {
     background: white;
     padding: 20px;
