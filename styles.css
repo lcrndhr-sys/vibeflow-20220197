@@ -6,14 +6,11 @@ body {
 
 h1 {
     margin-bottom: 10px;
-    color: #222;
 }
 
-/* 검색창 */
 .search-box {
     width: 100%;
-    padding: 12px 15px;
-    font-size: 15px;
+    padding: 12px;
     border-radius: 8px;
     border: 1px solid #ccc;
     margin-bottom: 20px;
@@ -28,53 +25,26 @@ h1 {
     width: 50%;
 }
 
-.left h2, .right h2 {
-    margin-bottom: 15px;
-    color: #444;
-}
-
-/* 카드 */
 .card {
     background: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 12px;
     border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
 
 .card:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     transform: translateY(-2px);
 }
 
-.card-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 6px;
-}
-
-.card-source {
-    font-size: 13px;
-    color: #666;
-}
-
-.card-date {
-    font-size: 12px;
-    color: #999;
-    margin-top: 4px;
-}
-
-/* 요약 박스 */
 .summary-box {
     background: white;
+    border: 1px solid #ddd;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #ddd;
     min-height: 300px;
     white-space: pre-line;
-    line-height: 1.6;
 }
-``
