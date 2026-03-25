@@ -2,23 +2,23 @@
 const listEl = document.getElementById("reportList");
 const summaryEl = document.getElementById("summary");
 
-// RSS 피드 목록 (작동 테스트용)
+// RSS 피드 목록
 const rssFeeds = [
-    {
-        name: "한국은행 경제동향",
-        url: "https://www.bok.or.kr/portal/bbs/B0000140/rss.do"
-    },
     {
         name: "Investing.com 경제뉴스",
         url: "https://www.investing.com/rss/news.rss"
     },
     {
-        name: "OECD 경제리포트",
-        url: "https://oecdcrossanalytics.org/feed/"
+        name: "Yahoo Finance Top Stories",
+        url: "https://finance.yahoo.com/news/rss/"
+    },
+    {
+        name: "한국은행 경제동향",
+        url: "https://www.bok.or.kr/portal/bbs/B0000140/rss.do"
     }
 ];
 
-// RSS 파싱 함수 (rss2json API 사용)
+// RSS 파싱
 async function fetchRSS(feedUrl) {
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
     const response = await fetch(apiUrl);
@@ -26,7 +26,7 @@ async function fetchRSS(feedUrl) {
     return data.items || [];
 }
 
-// 초기 RSS 로딩
+// 로딩
 async function loadRSSReports() {
     summaryEl.textContent = "📡 RSS 데이터 로딩 중...";
 
@@ -35,14 +35,31 @@ async function loadRSSReports() {
             const items = await fetchRSS(feed.url);
 
             items.forEach(item => {
-                const li = document.createElement("li");
-                li.textContent = `[${feed.name}] ${item.title}`;
-                
-                li.addEventListener("click", () => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+
+                // 카드 구성 요소
+                const title = document.createElement("div");
+                title.classList.add("card-title");
+                title.textContent = item.title;
+
+                const source = document.createElement("div");
+                source.classList.add("card-source");
+                source.textContent = feed.name;
+
+                const date = document.createElement("div");
+                date.classList.add("card-date");
+                date.textContent = item.pubDate || "";
+
+                card.appendChild(title);
+                card.appendChild(source);
+                card.appendChild(date);
+
+                card.addEventListener("click", () => {
                     summaryEl.textContent = generateSummaryRSS(item);
                 });
 
-                listEl.appendChild(li);
+                listEl.appendChild(card);
             });
 
         } catch (error) {
@@ -53,18 +70,15 @@ async function loadRSSReports() {
     summaryEl.textContent = "리포트를 선택하세요.";
 }
 
-// 요약 생성 함수
+// 개선된 요약 함수
 function generateSummaryRSS(item) {
-    // HTML 제거
     const cleanDescription = item.description
         .replace(/<[^>]*>/g, "")
         .replace(/\s+/g, " ")
         .trim();
 
-    // 핵심 한줄 요약 (첫 문장만 추출)
     const firstSentence = cleanDescription.split(".")[0] + ".";
 
-    // 자동 키워드 추출 (단순 버전)
     const words = cleanDescription.split(/\W+/);
     const freq = {};
     words.forEach(w => {
@@ -81,13 +95,12 @@ function generateSummaryRSS(item) {
 📍 주요 키워드
 - ${keywords.join(", ")}
 
-📝 본문 일부 발췌
+📝 본문 일부
 ${cleanDescription.slice(0, 220)}...
 
-🔗 전체 보기:
+🔗 전체 보기
 ${item.link}
     `;
 }
 
-// 실행
 loadRSSReports();
