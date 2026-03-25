@@ -144,3 +144,9 @@ async function fetchReport(url) {
   const data = await fetch(api).then(r => r.json());
   console.log(data);
 }
+async function fetchReport(url) {
+  const api = `https://report-api-sigma.vercel.app/api/report?url=${encodeURIComponent(url)}`;
+  const response = await fetch(api);
+  const data = await response.json();
+  return data;  // { title, snippet }
+}
