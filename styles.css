@@ -1,10 +1,12 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background: #f4f6f9;
 }
 
 h1 {
     margin-bottom: 20px;
+    color: #222;
 }
 
 .container {
@@ -14,31 +16,54 @@ h1 {
 
 .left, .right {
     width: 50%;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
+.left h2, .right h2 {
+    margin-bottom: 15px;
+    color: #444;
 }
 
-ul li {
-    margin: 10px 0;
-    cursor: pointer;
-    color: #0066cc;
-}
-
-ul li:hover {
-    text-decoration: underline;
-}
-
-#summary {
-    white-space: pre-line;
-    background: #fafafa;
+/* ------- 카드 스타일 목록 ------- */
+.card {
+    background: white;
     padding: 15px;
-    border-radius: 6px;
-    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.card-source {
+    font-size: 13px;
+    color: #666;
+}
+
+.card-date {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+/* ------- 요약 박스 ------- */
+.summary-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    min-height: 300px;
+    white-space: pre-line;
     line-height: 1.6;
 }
