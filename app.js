@@ -72,9 +72,20 @@ function renderReports(reports) {
         card.appendChild(source);
         card.appendChild(date);
 
-        card.addEventListener("click", () => {
-            summaryEl.textContent = generateSummaryRSS(item);
-        });
+       
+card.addEventListener("click", async () => {
+    summaryEl.textContent = "📡 리포트 불러오는 중...";
+
+    // 1) Vercel에서 리포트 HTML 가져오기
+    const result = await fetchReport(item.link);
+
+    // 2) HTML snippet을 요약
+    const summary = summarizeHTML(result.snippet);
+
+    // 3) 화면에 표시
+    summaryEl.textContent = summary;
+});
+
 
         listEl.appendChild(card);
     });
